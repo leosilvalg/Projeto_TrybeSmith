@@ -16,6 +16,15 @@ const PRODUCTS_MODEL = {
       .execute<ProductWithRow[]>('SELECT * FROM Trybesmith.Products; ');
     return result;
   },
+
+  getByOrderId: async (id: number): Promise<Product[]> => {
+    const [productsById] = await connection
+      .execute<ProductWithRow[]>(
+      'SELECT * FROM Trybesmith.Products WHERE orderId = ?', 
+      [id],
+    );
+    return productsById;
+  },
 };
 
 export default PRODUCTS_MODEL;
