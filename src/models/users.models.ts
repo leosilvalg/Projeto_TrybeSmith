@@ -3,7 +3,7 @@ import connection from './connection';
 import User from '../interfaces/users.interfaces';
 import LOGIN from '../interfaces/login.interface';
 
-interface LoginWithRow extends User, RowDataPacket { }
+interface ProductWithRow extends User, RowDataPacket { }
 
 const USERS_MODEL = {
   create: async ({ username, classe, level, password }: User): Promise<User> => {
@@ -18,7 +18,15 @@ const USERS_MODEL = {
     const query = `SELECT * FROM Trybesmith.Users 
     WHERE username =? and password = ?;`;
     const [[result]] = await connection
-      .execute<LoginWithRow[]>(query, [username, password]);
+      .execute<ProductWithRow[]>(query, [username, password]);
+    return result;
+  },
+
+  getById: async (id: number) => {
+    const query = `SELECT * FROM Trybesmith.Users 
+    WHERE id =?`;
+    const [[result]] = await connection
+      .execute<ProductWithRow[]>(query, [id]);
     return result;
   },
 };

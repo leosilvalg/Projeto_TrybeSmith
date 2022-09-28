@@ -1,4 +1,4 @@
-// import Order from '../interfaces/order.interface';
+import Order from '../interfaces/order.interface';
 import PRODUCTS_MODEL from '../models/products.models';
 import ORDER_MODEL from '../models/orders.model';
 
@@ -16,6 +16,16 @@ const ORDER_SERVICE = {
       return { id, userId, productsIds }; 
     });
     return Promise.all(RESULT);
+  },
+
+  create: async ({ userId, productsIds }: Order): Promise<Order> => {
+    const ORDER = await ORDER_MODEL.create(userId);
+    const ORDER_ID = ORDER.id || 0;
+    const UPDATE_PROMISE = productsIds
+      .map((id: number) => PRODUCTS_MODEL.update(id, ORDER_ID));
+    await Promise.all(UPDATE_PROMISE);
+    ORDER.productsIds = productsIds;
+    return ORDER;
   },
 };
 

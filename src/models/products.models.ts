@@ -25,6 +25,12 @@ const PRODUCTS_MODEL = {
     );
     return productsById;
   },
+
+  update: async (id: number, orderId: number): Promise<number> => {
+    const query = 'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ?';
+    await connection.execute<ResultSetHeader>(query, [orderId, id]);
+    return id;
+  },
 };
 
 export default PRODUCTS_MODEL;
